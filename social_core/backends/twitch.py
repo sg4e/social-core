@@ -11,7 +11,7 @@ class TwitchOpenIdConnect(OpenIdConnectAuth):
     name = 'twitch'
     USERNAME_KEY = 'preferred_username'
     OIDC_ENDPOINT = 'https://id.twitch.tv/oauth2'
-    DEFAULT_SCOPE = ['openid', 'user:read:email']
+    DEFAULT_SCOPE = ['openid',]
     TWITCH_CLAIMS = '{"id_token":{"email": null,"email_verified":null,"preferred_username":null}}'
 
     def auth_params(self, state=None):
@@ -23,7 +23,7 @@ class TwitchOpenIdConnect(OpenIdConnectAuth):
     def get_user_details(self, response):
         return {
             'username': self.id_token['preferred_username'],
-            'email': self.id_token['email'],
+            'email': 'example@example.com',
             # Twitch does not provide this information
             'fullname': '',
             'first_name': '',
@@ -38,7 +38,7 @@ class TwitchOAuth2(BaseOAuth2):
     AUTHORIZATION_URL = 'https://id.twitch.tv/oauth2/authorize'
     ACCESS_TOKEN_URL = 'https://id.twitch.tv/oauth2/token'
     ACCESS_TOKEN_METHOD = 'POST'
-    DEFAULT_SCOPE = ['user:read:email']
+    DEFAULT_SCOPE = []
     REDIRECT_STATE = False
 
     def get_user_id(self, details, response):
@@ -50,7 +50,7 @@ class TwitchOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         return {
             'username': response.get('login'),
-            'email': response.get('email'),
+            'email': 'example@example.com',
             'first_name': '',
             'last_name': ''
         }
